@@ -10,7 +10,7 @@ class App extends Component {
     this.state = {
       items: [],
       isLoaded: false,
-      query: "",
+      query: "paneer",
     };
     this.handleSearch = this.handleSearch.bind(this);
     this.updateQuery = this.updateQuery.bind(this);
@@ -20,7 +20,7 @@ class App extends Component {
     e.preventDefault();
     const QUERY = this.state.query;
     fetch(
-      `https://api.edamam.com/search?q=${QUERY}&app_id=${API_ID}&app_key=${API_KEY}&from=0&to=10&calories=591-722&health=alcohol-free`
+      `https://api.edamam.com/search?q=${QUERY}&app_id=${API_ID}&app_key=${API_KEY}&from=0&to=12&calories=591-722&health=alcohol-free`
     )
       .then((res) => res.json())
       .then((result) => {
@@ -37,9 +37,9 @@ class App extends Component {
     });
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     fetch(
-      `https://api.edamam.com/search?q=chicken&app_id=${API_ID}&app_key=${API_KEY}&from=0&to=10&calories=591-722&health=alcohol-free`
+      `https://api.edamam.com/search?q=${this.state.query}&app_id=${API_ID}&app_key=${API_KEY}&from=0&to=12&calories=591-722&health=alcohol-free`
     )
       .then((res) => res.json())
       .then((result) => {
