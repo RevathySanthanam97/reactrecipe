@@ -1,0 +1,32 @@
+.receipeItem {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-row-gap: 50px;
+  grid-gap: 1em;
+  text-transform: capitalize;
+  padding: 2em;
+}
+.receipeItem div {
+  background: #fff;
+  box-shadow: -2px 1px 24px 8px rgb(0 0 0 / 8%);
+  padding: 2em;
+  border-radius: 0.5em;
+  margin-bottom: 1em;
+}
+.receipeItem img {
+  width: 100%;
+  height: 300px;
+}
+.receipeItem h3 {
+  padding-bottom: 10px;
+}
+.receipeItem p {
+  padding: 10px 0px;
+}
+.receipeItem li,
+.receipeItem ol {
+  text-align: left;
+}
+.receipeItem li {
+  margin: 0 1rem;
+}
