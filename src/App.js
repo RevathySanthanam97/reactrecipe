@@ -22,7 +22,7 @@ class App extends Component {
     });
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (this.state.query !== prevProps.query && this.state.ifSubmitted) {
       fetch(
         `https://api.edamam.com/search?q=${this.state.query}&app_id=${API_ID}&app_key=${API_KEY}`
