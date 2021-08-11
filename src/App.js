@@ -9,76 +9,85 @@ class App extends Component {
     super(props);
     this.state = {
       items: [],
-      isLoaded: false,
-      query: "paneer",
+      loaded: false,
+      ifSubmitted: "false",
+      query: "chicken",
     };
-    this.handleSearch = this.handleSearch.bind(this);
-    this.updateQuery = this.updateQuery.bind(this);
   }
 
   handleSearch(e) {
     e.preventDefault();
-    const QUERY = this.state.query;
-    fetch(
-      `https://api.edamam.com/search?q=${QUERY}&app_id=${API_ID}&app_key=${API_KEY}`
-    )
-      .then((res) => res.json())
-      .then((result) => {
-        this.setState({
-          isLoaded: true,
-          items: result.hits,
-        });
-      });
-  }
-  updateQuery(e) {
     this.setState({
-      query: e.target.value,
+      ifSubmitted: true,
     });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.query !== prevProps.query && this.state.ifSubmitted) {
+      fetch(
+        `https://api.edamam.com/search?q=${this.state.query}&app_id=${API_ID}&app_key=${API_KEY}`
+      )
+        .then((res) => res.json())
+        .then((result) => {
+          this.setState({
+            items: result.hits,
+            ifSubmitted: false,
+          });
+        });
+    }
   }
 
   componentDidMount() {
     fetch(
-      `https://api.edamam.com/search?q=${this.state.query}&app_id=${API_ID}&app_key=${API_KEY}`
+      `https://api.edamam.com/search?q=chicken&app_id=${API_ID}&app_key=${API_KEY}`
     )
       .then((res) => res.json())
       .then((result) => {
         this.setState({
-          isLoaded: true,
           items: result.hits,
+          loaded: true,
         });
       });
   }
 
   render() {
-    return (
-      <div className="mainContainer">
-        <div className="formSection">
-          <h2>Search any Recipe</h2>
-          <form className="form" onSubmit={this.handleSearch}>
-            <input
-              className="input"
-              value={this.state.query}
-              onChange={(e) => this.updateQuery(e)}
-              placeholder="Search"
-            ></input>
-            <button className="button">
-              <BsSearch />
-            </button>
-          </form>
+    if (this.state.loaded) {
+      return (
+        <div className="mainContainer">
+          <div className="formSection">
+            <h2>Search any Recipe</h2>
+            <form className="form" onSubmit={this.handleSearch.bind(this)}>
+              <input
+                className="input"
+                value={this.state.query}
+                onChange={(e) =>
+                  this.setState({
+                    query: e.target.value,
+                  })
+                }
+                placeholder="Search"
+              ></input>
+              <button className="button">
+                <BsSearch />
+              </button>
+            </form>
+          </div>
+          <div className="receipeItem">
+            {this.state.items.map((item) => (
+              <Recipe
+                key={item.recipe.label}
+                title={item.recipe.label}
+                img={item.recipe.image}
+                calorie={item.recipe.calories}
+                ingredients={item.recipe.ingredients}
+              />
+            ))}
+          </div>
         </div>
-        <div className="receipeItem">
-          {this.state.items.map((item) => (
-            <Recipe
-              key={item.recipe.label}
-              title={item.recipe.label}
-              img={item.recipe.image}
-              calorie={item.recipe.calories}
-              ingredients={item.recipe.ingredients}
-            />
-          ))}
-        </div>
-      </div>
-    );
+      );
+    } else {
+      return <p>Page Loading...</p>;
+    }
   }
 }
 export default App;
